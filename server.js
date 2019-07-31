@@ -15,7 +15,7 @@ app.use(function validateBearerToken(req, res, next) {
     const apiToken = process.env.API_TOKEN;
 
     if(!authToken || authToken.split(' ')[1] !== apiToken) {
-        return res.status(401).json({error: 'Unauthorized access'})
+        return res.status(401).json({error: 'Unauthorized request'})
     }
 
     next()
@@ -32,15 +32,15 @@ function filterMovies(req, res) {
         movieList = movieList.filter(movie => movie.country.toLowerCase().includes(country.toLowerCase()))
     }
     if(avg_vote) {
-        const vote = parseFloat(avg_vote);
+        const vote = Number(avg_vote);
         movieList = movieList.filter(movie => movie.avg_vote >= vote)
     }
 
-    res.send(movieList);
+    res.json(movieList);
 }
 
 app.get('/movie', filterMovies);
 
 app.listen(8000, () => {
-    console.log('Server listening on PORT 8000')
+    console.log('Server listening on http://localhost:8000')
 })
